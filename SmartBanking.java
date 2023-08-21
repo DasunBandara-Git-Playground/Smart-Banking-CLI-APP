@@ -192,7 +192,7 @@ public class SmartBanking{
                     }while(true);
 
                     System.out.print("\n\tFrom A/C Name: "+getElement(accountDetails, fromAccNo, 1)+"\n");
-                    System.out.print("\n\tFrom A/C Balance: "+getElement(accountDetails, fromAccNo, 2)+"\n");
+                    System.out.printf("\n\tFrom A/C Balance: %,.2f\n",Double.valueOf(getElement(accountDetails, fromAccNo, 2)));
 
                     String toAccNo;
                     do{
@@ -205,7 +205,7 @@ public class SmartBanking{
                     }while(true);
 
                     System.out.print("\n\tFrom A/C Name: "+getElement(accountDetails, toAccNo, 1)+"\n");
-                    System.out.print("\n\tFrom A/C Balance: "+getElement(accountDetails, toAccNo, 2)+"\n");
+                    System.out.printf("\n\tFrom A/C Balance: %,.2f\n",Double.valueOf(getElement(accountDetails, toAccNo, 2)));
 
                     String transAmount;
                     do{
@@ -229,15 +229,66 @@ public class SmartBanking{
                         screen = DASHBOARD;
                         continue loop;
                     }
+                
+                case CAB:
+                    String accNoToCheckBalance;
+                    do{
+                        System.out.print("\n\tEnter to A/C NO: ");
+                        accNoToCheckBalance = scanner.nextLine().strip();
+                        if(!isValidAccNo(accNoToCheckBalance)){
+                            continue;
+                        }
+                        break;
+                    }while(true);
 
-                    break;
+                    System.out.print("\n\tName: "+getElement(accountDetails, accNoToCheckBalance, 1)+"\n");
+                    double accBalance = Double.valueOf(getElement(accountDetails, accNoToCheckBalance, 2));
+                    System.out.printf("\n\tCurrent A/C Balance: %,.2f\n",accBalance);
+                    System.out.printf("\n\tAvailable Balance for Withdraw: %,.2f\n",(accBalance-500));
+
+                    System.out.print("\n\tIf you want to continue(Y/n): ");
+                    if(scanner.nextLine().strip().equalsIgnoreCase("Y")){
+                        continue;
+                    }else{
+                        screen = DASHBOARD;
+                        continue loop;
+                    }
+                
+                case DA:
+                    String accNoToDelete;
+                    do{
+                        System.out.print("\n\tEnter to A/C NO: ");
+                        accNoToDelete = scanner.nextLine().strip();
+                        if(!isValidAccNo(accNoToDelete)){
+                            continue;
+                        }
+                        break;
+                    }while(true);
+                    String nameToDelete = getElement(accountDetails, accNoToDelete, 1);
+                    System.out.print("\n\tName: "+nameToDelete+"\n");
+                    accBalance = Double.valueOf(getElement(accountDetails, accNoToDelete, 2));
+                    System.out.printf("\n\tA/C Balance: %,.2f\n",accBalance);
+
+                    System.out.print("\n\tAre you sure to delete(Y/n): ");
+                    if(scanner.nextLine().strip().equalsIgnoreCase("Y")){
+                        System.out.printf(SUC_MSG,accNoToDelete+" : "+nameToDelete+" has been deleted successfully");
+                        accountDetails = deleteElements(accountDetails, getIndex(accountDetails, accNoToDelete));
+
+                    }else{
+                        screen = DASHBOARD;
+                        continue loop;
+                    }
+
+                    System.out.print("\n\tIf you want to continue(Y/n): ");
+                    if(scanner.nextLine().strip().equalsIgnoreCase("Y")){
+                        continue;
+                    }else{
+                        screen = DASHBOARD;
+                        continue loop;
+                    }
                     
-
-
-    
-
             }
-            break;
+
         }while(true);
 
         
@@ -343,7 +394,7 @@ public class SmartBanking{
             case 1:
                 return accDetails[getIndex(accDetails, accNo)][index];
             default:
-                return String.format("%,.2f",Double.valueOf(accDetails[getIndex(accDetails, accNo)][index]));
+                return Double.valueOf(accDetails[getIndex(accDetails, accNo)][index])+"";
         }
     }
 
@@ -352,5 +403,18 @@ public class SmartBanking{
             return true;
         }
         return false;
+    }
+
+    public static String[][] deleteElements(String[][] accDetails, int index){
+        String[][] temp = new String[accDetails.length-1][3];
+        for (int i = 0; i < accDetails.length; i++) {
+            if(i<index){
+                temp[i] = accDetails[i];
+            }else if(i>index){
+                temp[i-1] = accDetails[i];
+            }
+        }
+        return temp; 
+    }
 
 }
