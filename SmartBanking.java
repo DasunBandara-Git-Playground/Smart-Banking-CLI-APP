@@ -181,7 +181,55 @@ public class SmartBanking{
                     }
                 
                 case TRANS:
-                    
+                    String fromAccNo;
+                    do{
+                        System.out.print("\n\tEnter from A/C NO: ");
+                        fromAccNo = scanner.nextLine().strip();
+                        if(!isValidAccNo(fromAccNo)){
+                            continue;
+                        }
+                        break;
+                    }while(true);
+
+                    System.out.print("\n\tFrom A/C Name: "+getElement(accountDetails, fromAccNo, 1)+"\n");
+                    System.out.print("\n\tFrom A/C Balance: "+getElement(accountDetails, fromAccNo, 2)+"\n");
+
+                    String toAccNo;
+                    do{
+                        System.out.print("\n\tEnter to A/C NO: ");
+                        toAccNo = scanner.nextLine().strip();
+                        if(!isValidAccNo(toAccNo)){
+                            continue;
+                        }
+                        break;
+                    }while(true);
+
+                    System.out.print("\n\tFrom A/C Name: "+getElement(accountDetails, toAccNo, 1)+"\n");
+                    System.out.print("\n\tFrom A/C Balance: "+getElement(accountDetails, toAccNo, 2)+"\n");
+
+                    String transAmount;
+                    do{
+                        System.out.print("\n\tEnter Amount: ");
+                        transAmount = scanner.nextLine();
+                        if(isLegalTransfer(accountDetails, fromAccNo, transAmount)){
+                            break;
+                        }
+                        System.out.printf(ERR_MSG,"Insufficient Amount");
+                    }while(true);
+
+                    double fromAccBlance = Double.valueOf(accountDetails[getIndex(accountDetails, fromAccNo)][2]) - Double.valueOf(transAmount)*1.02;
+                    double toAccBlance = Double.valueOf(accountDetails[getIndex(accountDetails, toAccNo)][2]) + Double.valueOf(transAmount);
+                    addElement(accountDetails, fromAccBlance+"", getIndex(accountDetails, fromAccNo), 2);
+                    addElement(accountDetails, toAccBlance+"", getIndex(accountDetails, toAccNo), 2);
+
+                    System.out.print("\n\tIf you want to continue(Y/n): ");
+                    if(scanner.nextLine().strip().equalsIgnoreCase("Y")){
+                        continue;
+                    }else{
+                        screen = DASHBOARD;
+                        continue loop;
+                    }
+
                     break;
                     
 
@@ -295,8 +343,14 @@ public class SmartBanking{
             case 1:
                 return accDetails[getIndex(accDetails, accNo)][index];
             default:
-                return String.format("\n\t%,.2f\n",Double.valueOf(accDetails[getIndex(accDetails, accNo)][index]));
+                return String.format("%,.2f",Double.valueOf(accDetails[getIndex(accDetails, accNo)][index]));
         }
     }
+
+    public static boolean isLegalTransfer(String[][] accDetails, String accNo, String amount){
+        if(Double.valueOf(amount)>=100 && (Double.valueOf(accDetails[getIndex(accDetails, accNo)][2])-Double.valueOf(amount)*1.02)>=500){
+            return true;
+        }
+        return false;
 
 }
