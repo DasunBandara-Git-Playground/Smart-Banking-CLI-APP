@@ -290,4 +290,13 @@ public class SmartBanking{
         return false;
     }
 
+    public static String getElement(String[][] accDetails, String accNo, int index){
+        switch(index){
+            case 1:
+                return accDetails[getIndex(accDetails, accNo)][index];
+            default:
+                return String.format("\n\t%,.2f\n",Double.valueOf(accDetails[getIndex(accDetails, accNo)][index]));
+        }
+    }
+
 }
