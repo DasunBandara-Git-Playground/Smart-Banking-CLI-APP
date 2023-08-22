@@ -83,19 +83,7 @@ public class SmartBanking{
                     do{
                         System.out.print("\n\tEnter A/C No: ");
                         accNo = scanner.nextLine().strip();
-                        if(isValidAccNo(accNo)){
-                            if(getIndex(accountDetails, accNo) == -1){
-                                System.out.printf(ERR_MSG,"A/C No not found");
-                                System.out.print("\n\tIf you want to continue(Y/n): ");
-                                if(scanner.nextLine().strip().equalsIgnoreCase("Y")){
-                                    continue;
-                                }else{
-                                    screen = DASHBOARD;
-                                    continue loop;
-                                }
-                            }
-                            break;
-                        }else{
+                        if(!isValidAccNo(accountDetails,accNo)){
                             System.out.print("\n\tIf you want to continue(Y/n): ");
                             if(scanner.nextLine().strip().equalsIgnoreCase("Y")){
                                 continue;
@@ -104,6 +92,7 @@ public class SmartBanking{
                                 continue loop;
                             }
                         }
+                        break;
                     }while(true);
                     System.out.printf("\n\tCurrent Balance: Rs.%,.2f\n",Double.valueOf(accountDetails[getIndex(accountDetails, accNo)][2]));
 
@@ -118,7 +107,7 @@ public class SmartBanking{
                         break;
                     }while(true);
                     double newBlance = Double.valueOf(newDeposite)+Double.valueOf(accountDetails[getIndex(accountDetails, accNo)][2]);
-                    System.out.printf("\n\tNew Balance: %,.2f\n",newBlance);
+                    System.out.printf("\n\tNew Balance: Rs.%,.2f\n",newBlance);
                     addElement(accountDetails, newBlance+"", getIndex(accountDetails, accNo),2);
 
                     System.out.print("\n\tIf you want to continue(Y/n): ");
@@ -134,7 +123,7 @@ public class SmartBanking{
                     do{
                         System.out.print("\n\tEnter A/C No: ");
                         accNoWd = scanner.nextLine().strip();
-                        if(isValidAccNo(accNoWd)){
+                        if(isValidAccNo(accountDetails,accNoWd)){
                             if(getIndex(accountDetails, accNoWd) == -1){
                                 System.out.printf(ERR_MSG,"A/C No not found");
                                 System.out.print("\n\tIf you want to continue(Y/n): ");
@@ -169,7 +158,7 @@ public class SmartBanking{
                         break;
                     }while(true);
                     double newBlanceWd = Double.valueOf(accountDetails[getIndex(accountDetails, accNoWd)][2])-Double.valueOf(newWithdraw);
-                    System.out.printf("\n\tNew Balance: %,.2f\n",newBlanceWd);
+                    System.out.printf("\n\tNew Balance: Rs.%,.2f\n",newBlanceWd);
                     addElement(accountDetails, newBlanceWd+"", getIndex(accountDetails, accNoWd),2);
 
                     System.out.print("\n\tIf you want to continue(Y/n): ");
@@ -185,27 +174,27 @@ public class SmartBanking{
                     do{
                         System.out.print("\n\tEnter from A/C NO: ");
                         fromAccNo = scanner.nextLine().strip();
-                        if(!isValidAccNo(fromAccNo)){
+                        if(!isValidAccNo(accountDetails,fromAccNo)){
                             continue;
                         }
                         break;
                     }while(true);
 
                     System.out.print("\n\tFrom A/C Name: "+getElement(accountDetails, fromAccNo, 1)+"\n");
-                    System.out.printf("\n\tFrom A/C Balance: %,.2f\n",Double.valueOf(getElement(accountDetails, fromAccNo, 2)));
+                    System.out.printf("\n\tFrom A/C Balance: Rs.%,.2f\n",Double.valueOf(getElement(accountDetails, fromAccNo, 2)));
 
                     String toAccNo;
                     do{
                         System.out.print("\n\tEnter to A/C NO: ");
                         toAccNo = scanner.nextLine().strip();
-                        if(!isValidAccNo(toAccNo)){
+                        if(!isValidAccNo(accountDetails,toAccNo)){
                             continue;
                         }
                         break;
                     }while(true);
 
                     System.out.print("\n\tFrom A/C Name: "+getElement(accountDetails, toAccNo, 1)+"\n");
-                    System.out.printf("\n\tFrom A/C Balance: %,.2f\n",Double.valueOf(getElement(accountDetails, toAccNo, 2)));
+                    System.out.printf("\n\tFrom A/C Balance: Rs.%,.2f\n",Double.valueOf(getElement(accountDetails, toAccNo, 2)));
 
                     String transAmount;
                     do{
@@ -235,7 +224,7 @@ public class SmartBanking{
                     do{
                         System.out.print("\n\tEnter to A/C NO: ");
                         accNoToCheckBalance = scanner.nextLine().strip();
-                        if(!isValidAccNo(accNoToCheckBalance)){
+                        if(!isValidAccNo(accountDetails,accNoToCheckBalance)){
                             continue;
                         }
                         break;
@@ -243,8 +232,8 @@ public class SmartBanking{
 
                     System.out.print("\n\tName: "+getElement(accountDetails, accNoToCheckBalance, 1)+"\n");
                     double accBalance = Double.valueOf(getElement(accountDetails, accNoToCheckBalance, 2));
-                    System.out.printf("\n\tCurrent A/C Balance: %,.2f\n",accBalance);
-                    System.out.printf("\n\tAvailable Balance for Withdraw: %,.2f\n",(accBalance-500));
+                    System.out.printf("\n\tCurrent A/C Balance: Rs.%,.2f\n",accBalance);
+                    System.out.printf("\n\tAvailable Balance for Withdraw: Rs.%,.2f\n",(accBalance-500));
 
                     System.out.print("\n\tIf you want to continue(Y/n): ");
                     if(scanner.nextLine().strip().equalsIgnoreCase("Y")){
@@ -259,7 +248,7 @@ public class SmartBanking{
                     do{
                         System.out.print("\n\tEnter to A/C NO: ");
                         accNoToDelete = scanner.nextLine().strip();
-                        if(!isValidAccNo(accNoToDelete)){
+                        if(!isValidAccNo(accountDetails,accNoToDelete)){
                             continue;
                         }
                         break;
@@ -267,7 +256,7 @@ public class SmartBanking{
                     String nameToDelete = getElement(accountDetails, accNoToDelete, 1);
                     System.out.print("\n\tName: "+nameToDelete+"\n");
                     accBalance = Double.valueOf(getElement(accountDetails, accNoToDelete, 2));
-                    System.out.printf("\n\tA/C Balance: %,.2f\n",accBalance);
+                    System.out.printf("\n\tA/C Balance: Rs.%,.2f\n",accBalance);
 
                     System.out.print("\n\tAre you sure to delete(Y/n): ");
                     if(scanner.nextLine().strip().equalsIgnoreCase("Y")){
@@ -351,7 +340,7 @@ public class SmartBanking{
         return false;
     }
 
-    public static boolean isValidAccNo(String accNo){
+    public static boolean isValidAccNo(String[][] accDetails, String accNo){
             
         if(accNo.isBlank()){
             System.out.printf(ERR_MSG,"A/C can't be empty");
@@ -368,9 +357,14 @@ public class SmartBanking{
                     return false;
                 }
             }
+            for (int i = 0; i < accDetails.length; i++) {
+                if(accDetails[i][0].equals(accNo)){
+                    return true;
+                }
+            }
+            System.out.printf(ERR_MSG,"A/C Number not found");
+            return false;   
         }
-
-        return true;
     }
 
     public static int getIndex(String[][] accDetails, String accNo){
@@ -416,5 +410,4 @@ public class SmartBanking{
         }
         return temp; 
     }
-
 }
